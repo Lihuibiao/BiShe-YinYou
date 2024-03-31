@@ -1,0 +1,18 @@
+{"skeleton":{"images":"images/"},
+"bones":[{"name":"root"}],
+"slots":[
+	{"name":"ztui02","bone":"root","attachment":"ztui02"},
+	{"name":"ztui01","bone":"root","attachment":"ztui01"},
+	{"name":"ytui02","bone":"root","attachment":"ytui02"},
+	{"name":"ytui01","bone":"root","attachment":"ytui01"}
+],
+"skins":{
+	"default":{
+		"ytui01":{"ytui01":{"x":495.5,"y":352.5,"width":215,"height":433}},
+		"ytui02":{"ytui02":{"x":463,"y":609,"width":230,"height":314}},
+		"ztui01":{"ztui01":{"x":358,"y":344.5,"width":236,"height":437}},
+		"ztui02":{"ztui02":{"x":318,"y":603.5,"width":206,"height":325}}
+	}
+},
+"animations":{"animation":{}}
+}
