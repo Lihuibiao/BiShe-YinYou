@@ -19,29 +19,8 @@ public class PlayerCntroller : MonoBehaviour
     private PolygonCollider2D PolygonCollider2D;
     private List<Vector2> points = new List<Vector2>();
     public bool isGround;
-
-    public bool _canRun;
-    public bool CanRun
-    {
-        get
-        {
-            return _canRun;
-        }
-        set
-        {
-            _canRun = value;
-            if (_canRun)
-            {
-                myAnim.runtimeAnimatorController = Run_Animator;
-            }
-            else
-            {
-                myAnim.runtimeAnimatorController = Walk_Animator;
-            }
-        }
-    }
+    
     private bool canDoubleJump;
-    private bool isOneWayPlatform;
 
     public RuntimeAnimatorController Run_Animator;
     public RuntimeAnimatorController Walk_Animator;
@@ -79,35 +58,64 @@ public class PlayerCntroller : MonoBehaviour
         PolygonCollider2D = GetComponent<PolygonCollider2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void fixedCollider()
     {
-
         SpriteRenderer.sprite.GetPhysicsShape(0, points);
         PolygonCollider2D.SetPath(0 , points);
+    }
+    
+    void Update()
+    {
+        fixedCollider();
+        AniCtrl();
+        
+        
         
         if (this.CanController)
         {
-            Run();
-            Flip();
-            CheckGrounded();
-            //Jump();
-            //Attack();//攻击
-            SwitchAnimation();//动画切换
-            AttackWithEnergy();
+            // Run();
+            // Flip();
+            // CheckGrounded();
+            // //Jump();
+            // //Attack();//攻击
+            // SwitchAnimation();//动画切换
+            // AttackWithEnergy();
         }
 
-        if(_canRun && myAnim.runtimeAnimatorController != Run_Animator)
-        {
-            myAnim.runtimeAnimatorController = Run_Animator;
-        }
-        else if(!_canRun && myAnim.runtimeAnimatorController != Walk_Animator)
-        {
-            myAnim.runtimeAnimatorController = Walk_Animator;
-        }
+        // if(_canRun && myAnim.runtimeAnimatorController != Run_Animator)
+        // {
+        //     myAnim.runtimeAnimatorController = Run_Animator;
+        // }
+        // else if(!_canRun && myAnim.runtimeAnimatorController != Walk_Animator)
+        // {
+        //     myAnim.runtimeAnimatorController = Walk_Animator;
+        // }
 
-        OnFail();
+        // OnFail();
         // PolygonCollider2D.
+    }
+
+    private void AniCtrl()
+    {
+        if (myAnim.GetBool("Jump"))
+        {
+            myAnim.SetBool("Jump" , false);
+        }
+        
+        if (myAnim.GetBool("Attack"))
+        {
+            myAnim.SetBool("Attack" , false);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Space) && myAnim.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+        {
+            myAnim.SetBool("Jump" , true);
+        }
+        
+        if (Input.GetMouseButton(0) && myAnim.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+        {
+            myAnim.SetBool("Attack" , true);
+        }
     }
     void CheckGrounded()
     {
@@ -117,19 +125,19 @@ public class PlayerCntroller : MonoBehaviour
 
     void Flip()
     {
-        bool plyerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
-        if (plyerHasXAxisSpeed)
-        {
-            if (myRigidbody.velocity.x > 0.1f)
-            {
-                transform.localRotation = Quaternion.Euler(0, 0, 0);
-            }
-
-            if (myRigidbody.velocity.x < -0.1f)
-            {
-                transform.localRotation = Quaternion.Euler(0, 180, 0);
-            }
-        }
+        // bool plyerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
+        // if (plyerHasXAxisSpeed)
+        // {
+        //     if (myRigidbody.velocity.x > 0.1f)
+        //     {
+        //         transform.localRotation = Quaternion.Euler(0, 0, 0);
+        //     }
+        //
+        //     if (myRigidbody.velocity.x < -0.1f)
+        //     {
+        //         transform.localRotation = Quaternion.Euler(0, 180, 0);
+        //     }
+        // }
     }
     //}
     void Run()
@@ -141,9 +149,9 @@ public class PlayerCntroller : MonoBehaviour
         //myAnim.SetBool("Run", plyerHasXAxisSpeed);
 
         // Debug.LogError(move);
-        Vector2 playerVelocity = new Vector2(move.x * runSpeed, myRigidbody.velocity.y);
-        myRigidbody.velocity = playerVelocity;
-        bool playerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
+        // Vector2 playerVelocity = new Vector2(move.x * runSpeed, myRigidbody.velocity.y);
+        // myRigidbody.velocity = playerVelocity;
+        // bool playerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
         // if (CanRun)
         // {
         //     myAnim.SetBool("Run", playerHasXAxisSpeed);
@@ -254,11 +262,11 @@ public class PlayerCntroller : MonoBehaviour
         if (myAnim != null)
         {
             myAnim.SetBool("Idle" , true);
-            if (CanRun)
+            // if (CanRun)
             {
                 myAnim.SetBool("Run", false);    
             }
-            else
+            // else
             {
                 myAnim.SetBool("Walk", false);   
             }
