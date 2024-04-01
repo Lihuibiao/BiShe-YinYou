@@ -15,7 +15,9 @@ public class PlayerCntroller : MonoBehaviour
 
     private Rigidbody2D myRigidbody;
     private Animator myAnim;
+    private SpriteRenderer SpriteRenderer;
     private PolygonCollider2D PolygonCollider2D;
+    private List<Vector2> points = new List<Vector2>();
     public bool isGround;
 
     public bool _canRun;
@@ -73,12 +75,17 @@ public class PlayerCntroller : MonoBehaviour
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         PolygonCollider2D = GetComponent<PolygonCollider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        SpriteRenderer.sprite.GetPhysicsShape(0, points);
+        PolygonCollider2D.SetPath(0 , points);
+        
         if (this.CanController)
         {
             Run();
@@ -100,11 +107,11 @@ public class PlayerCntroller : MonoBehaviour
         }
 
         OnFail();
-
+        // PolygonCollider2D.
     }
     void CheckGrounded()
     {
-        isGround = PolygonCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground"));
+        // isGround = PolygonCollider2D.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }   
 
 
@@ -133,7 +140,7 @@ public class PlayerCntroller : MonoBehaviour
         //bool plyerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
         //myAnim.SetBool("Run", plyerHasXAxisSpeed);
 
-        Debug.LogError(move);
+        // Debug.LogError(move);
         Vector2 playerVelocity = new Vector2(move.x * runSpeed, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
         bool playerHasXAxisSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
